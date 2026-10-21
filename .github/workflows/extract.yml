@@ -1,0 +1,38 @@
+name: Auto Update Sports Streams
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch: 
+
+jobs:
+  run-extractor:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install Dependencies
+        run: |
+          npm install
+          npx playwright install chromium --with-deps
+
+      - name: Run Extraction Script
+        run: node extractor.js
+
+      - name: Commit & Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add streams.json
+          git commit -m "Auto-update sports streams [skip ci]" || exit 0
+          git push
