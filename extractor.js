@@ -26,7 +26,7 @@ const fs = require('fs');
 
   try {
     // Target portal ya authorized web player URL
-    await page.goto('TARGET_STREAMING_PAGE_URL', { waitUntil: 'networkidle', timeout: 30000 });
+    await page.goto('https://live.api-live.workers.dev/?id=beIN3', { waitUntil: 'networkidle', timeout: 30000 });
     await page.waitForTimeout(5000);
   } catch (err) {
     console.error('Extraction error:', err.message);
